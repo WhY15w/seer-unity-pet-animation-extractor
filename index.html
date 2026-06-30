@@ -7,8 +7,14 @@
       content="width=device-width, initial-scale=1.0" />
     <title>Unity Mesh Animation WebGL Player</title>
     <style>
+      html,
       body {
         margin: 0;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+      }
+      body {
         background: #222;
         display: flex;
         flex-direction: column;
@@ -18,6 +24,8 @@
       canvas {
         border: 1px solid #444;
         margin-top: 20px;
+        max-width: 100vw;
+        max-height: calc(100vh - 80px);
       }
       #controls {
         margin: 10px;
@@ -276,19 +284,32 @@
 
         const scale = parseFloat(document.getElementById("scale").value);
         const padding = 20;
-        const w = Math.ceil((maxX - minX) * scale) + padding * 2;
-        const h = Math.ceil((maxY - minY) * scale) + padding * 2;
+        const meshW = maxX - minX || 1;
+        const meshH = maxY - minY || 1;
+        let w = Math.ceil(meshW * scale) + padding * 2;
+        let h = Math.ceil(meshH * scale) + padding * 2;
+
+        const maxW = Math.max(window.innerWidth, 200);
+        const maxH = Math.max(window.innerHeight - 100, 200);
+        let effectiveScale = scale;
+        if (w > maxW || h > maxH) {
+          const scaleW = (maxW - padding * 2) / meshW;
+          const scaleH = (maxH - padding * 2) / meshH;
+          effectiveScale = Math.min(scaleW, scaleH, scale);
+          w = Math.ceil(meshW * effectiveScale) + padding * 2;
+          h = Math.ceil(meshH * effectiveScale) + padding * 2;
+        }
 
         canvas.width = w;
         canvas.height = h;
         gl.viewport(0, 0, w, h);
 
-        // 计算偏移量（居中）
-        const offsetX = padding - minX * scale;
-        const offsetY = padding + maxY * scale; // Y轴翻转后的偏移
+        const offsetX = padding - minX * effectiveScale;
+        const offsetY = padding + maxY * effectiveScale;
 
         window._canvasOffset = [offsetX, offsetY];
         window._canvasSize = [w, h];
+        window._effectiveScale = effectiveScale;
 
         document.getElementById("info").textContent =
           `序列: ${name} | 帧数: ${frames.length} | 画布: ${w}x${h}`;
@@ -347,7 +368,8 @@
         gl.uniform2fv(uOffset, window._canvasOffset);
         gl.uniform1f(
           uScale,
-          parseFloat(document.getElementById("scale").value),
+          window._effectiveScale ||
+            parseFloat(document.getElementById("scale").value),
         );
         gl.uniform1i(uImage, 0);
 
