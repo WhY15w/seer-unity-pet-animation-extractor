@@ -6,7 +6,7 @@
 
 ## WebGL 浏览器预览
 
-根目录下启动一个http服务(`npx http-server .`)打开 `http://localhost:8000`，默认加载 `4913.pet.json` 和 `4913._Atlas_.png`。
+根目录下启动一个http服务(`npx http-server .`)打开 `http://127.0.0.1:8080`，默认加载 `4913.pet.json` 和 `4913._Atlas_.png`。
 
 支持功能：切换动画序列、调节播放速度、缩放、暂停/播放。
 
