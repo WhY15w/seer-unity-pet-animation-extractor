@@ -1,5 +1,8 @@
 # Seer Unity Mesh Animation Extractor
 
+> [!WARNING]
+> 说明：就是一个快速验证个人想法是否可行的小工具，swf精灵共享材质没有处理，导出速度缓慢，学习一下原理即可，不要当作生产工具使用。可以前往朋友[坚果](https://github.com/Nattsu39)的 [seer-pet-viewer](https://github.com/Nattsu39/seer-pet-viewer)或者我的[网页](https://seerinfo.yuyuqaq.cn/tool/petanim)查看动画~
+
 提取 Unity 2D Mesh 动画序列，支持导出为 GIF / WebP / 逐帧 PNG，并提供 WebGL 浏览器预览。
 
 ![示例动画](img/standby.webp)
